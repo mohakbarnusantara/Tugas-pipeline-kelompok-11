@@ -1,0 +1,43 @@
+{{define "home"}}{{template "layout" .}}{{end}}
+{{define "home-content"}}
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-copy">
+      <span class="eyebrow"><span class="pulse"></span> PELAYANAN KELURAHAN DIGITAL</span>
+      <h1>Urus kebutuhan warga,<br><em>lebih mudah.</em></h1>
+      <p>Ajukan surat, sampaikan aspirasi, dan pantau tindak lanjut layanan kelurahan dari satu tempat.</p>
+      <div class="hero-actions"><a class="button button-light" href="/register">Mulai layanan <span>→</span></a><a class="text-link light-link" href="/tracking">Lacak permohonan <span>↗</span></a></div>
+      <div class="hero-note"><span class="avatar-stack"><i>✓</i><i>✓</i><i>✓</i></span><span>Transparan, tertib, dan bisa dipantau</span></div>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+      <div class="sun-disc"></div>
+      <div class="art-card art-main"><span class="art-icon">⌂</span><div><small>LAYANAN HARI INI</small><strong>Siap melayani warga</strong></div><span class="art-check">✓</span></div>
+      <div class="art-card art-float"><span class="mini-icon">✉</span><span><small>Permohonan surat</small><strong>Diproses dengan aman</strong></span></div>
+      <div class="art-leaf leaf-one"></div><div class="art-leaf leaf-two"></div>
+      <div class="art-building"><div class="roof"></div><div class="building-body"><div class="building-sign">KELURAHAN</div><div class="building-columns"><i></i><i></i><i></i></div><div class="building-door"></div></div><div class="building-base"></div></div>
+      <span class="art-spark spark-one">✦</span><span class="art-spark spark-two">✳</span>
+    </div>
+  </div>
+  <div class="hero-wave"></div>
+</section>
+<section class="section quick-section">
+  <div class="section-heading"><div><span class="eyebrow eyebrow-green">LAYANAN UTAMA</span><h2>Semua kebutuhan, satu layanan</h2></div><p>Mulai dari dokumen administrasi hingga laporan lingkungan. Kami bantu setiap langkahnya.</p></div>
+  <div class="service-cards">
+    <a class="service-card" href="/register"><span class="service-icon icon-mint">▤</span><span class="card-kicker">ADMINISTRASI</span><strong>Pengajuan surat</strong><p>30 jenis surat kelurahan dengan proses yang bisa dipantau.</p><span class="card-arrow">↗</span></a>
+    <a class="service-card" href="/register"><span class="service-icon icon-peach">◉</span><span class="card-kicker">ASPIRASI WARGA</span><strong>Aduan masyarakat</strong><p>Sampaikan kondisi lingkungan beserta lokasi dan bukti pendukung.</p><span class="card-arrow">↗</span></a>
+    <a class="service-card" href="/tracking"><span class="service-icon icon-blue">⌕</span><span class="card-kicker">TRANSPARANSI</span><strong>Lacak status</strong><p>Ketahui perkembangan surat dan tindak lanjut aduan Anda.</p><span class="card-arrow">↗</span></a>
+  </div>
+</section>
+<section class="section process-section">
+  <div class="section-heading centered"><span class="eyebrow eyebrow-green">MUDAH DAN JELAS</span><h2>Pelayanan dalam 3 langkah</h2><p>Mulai dari ponsel atau komputer, tanpa perlu antre untuk mengajukan.</p></div>
+  <div class="steps">
+    <div class="step"><span class="step-number">01</span><span class="step-icon">♙</span><h3>Buat akun warga</h3><p>Daftar dengan identitas sesuai KTP. Akun diverifikasi oleh petugas kelurahan.</p></div>
+    <div class="step-connector"></div>
+    <div class="step"><span class="step-number">02</span><span class="step-icon">▤</span><h3>Pilih layanan</h3><p>Isi data yang diperlukan dan lampirkan berkas pendukung secara daring.</p></div>
+    <div class="step-connector"></div>
+    <div class="step"><span class="step-number">03</span><span class="step-icon">✓</span><h3>Pantau prosesnya</h3><p>Gunakan kode tracking untuk melihat status hingga dokumen siap diunduh.</p></div>
+  </div>
+</section>
+<section class="cta-band"><div><span class="eyebrow">ADA YANG INGIN DISAMPAIKAN?</span><h2>Suara warga, perubahan bersama.</h2><p>Laporkan masalah lingkungan agar bisa segera ditindaklanjuti.</p></div><a class="button button-light" href="/register">Sampaikan aduan <span>→</span></a></section>
+<section class="section track-strip"><div class="track-icon">⌕</div><div><h3>Sudah punya kode permohonan?</h3><p>Periksa status layanan Anda secara langsung.</p></div><a href="/tracking" class="button button-outline">Lacak sekarang <span>→</span></a></section>
+{{end}}

@@ -1,0 +1,43 @@
+{{define "auth"}}{{template "layout" .}}{{end}}
+{{define "auth-content"}}
+<section class="auth-section">
+  <div class="auth-aside">
+    <span class="eyebrow eyebrow-light">SELAMAT DATANG DI SILAYANG</span>
+    <h1>{{if eq .Code "login"}}Senang bertemu<br>kembali.{{else}}Mulai dari<br>langkah kecil.{{end}}</h1>
+    <p>{{if eq .Code "login"}}Masuk untuk melanjutkan urusan layanan kelurahan Anda.{{else}}Buat akun warga untuk mengakses layanan administrasi dan menyampaikan aduan.{{end}}</p>
+    <div class="auth-quote"><span>“</span><p>Pelayanan publik yang baik dimulai dari akses yang mudah untuk semua.</p></div>
+    <div class="auth-aside-bottom">✳ &nbsp; Layanan warga yang dekat, mudah, dan transparan</div>
+  </div>
+  <div class="auth-main"><div class="auth-form-wrap">
+    <a class="back-link" href="/">← Kembali ke beranda</a>
+    <span class="eyebrow eyebrow-green">{{if eq .Code "login"}}AKUN WARGA{{else}}PENDAFTARAN WARGA{{end}}</span>
+    <h2>{{if eq .Code "login"}}Masuk ke akun Anda{{else}}Buat akun SILAYANG{{end}}</h2>
+    <p class="muted">{{if eq .Code "login"}}Masukkan email dan kata sandi untuk masuk.{{else}}Isi data sesuai identitas pada KTP Anda.{{end}}</p>
+    {{if .Error}}<div class="alert alert-error" role="alert">{{.Error}}</div>{{end}}
+    {{if eq .Code "login"}}
+      <form method="post" action="/login" class="form-stack">
+        <label>Email<input type="email" name="email" placeholder="nama@email.com" autocomplete="email" required></label>
+        <label>Kata sandi<input type="password" name="password" placeholder="Masukkan kata sandi" autocomplete="current-password" required></label>
+        <button class="button button-primary button-wide" type="submit">Masuk ke akun <span>→</span></button>
+      </form>
+      <p class="auth-switch">Belum punya akun? <a href="/register">Daftar sebagai warga</a></p>
+      <div class="demo-box"><strong>Akun demo</strong><span>Warga: warga@silayang.local</span><span>Staf: staf@silayang.local</span><span>Lurah: lurah@silayang.local</span><small>Kata sandi akun demo: <code>silayang123</code></small></div>
+    {{else}}
+      <form method="post" action="/register" enctype="multipart/form-data" class="form-stack">
+        <label>Nama lengkap sesuai KTP<input type="text" name="name" autocomplete="name" required></label>
+        <div class="form-grid"><label>NIK (16 digit)<input type="text" name="nik" inputmode="numeric" minlength="16" maxlength="16" pattern="[0-9]{16}" required></label><label>Nomor HP / WhatsApp<input type="tel" name="phone" autocomplete="tel" required></label></div>
+        <label>Email aktif<input type="email" name="email" autocomplete="email" required></label>
+        <div class="form-grid"><label>Tempat lahir<input type="text" name="birth_place" autocomplete="off"></label><label>Tanggal lahir<input type="date" name="birth_date" required></label></div>
+        <div class="form-grid"><label>Jenis kelamin<select name="gender" required><option value="">Pilih</option><option value="L">Laki-laki</option><option value="P">Perempuan</option></select></label><label>Pekerjaan<input type="text" name="occupation"></label></div>
+        <div class="form-grid"><label>Kecamatan domisili<select name="home_district" id="district-select" required><option value="">Pilih kecamatan</option>{{range .Districts}}<option value="{{.}}" data-neighborhoods="{{join (index $.Neighborhoods .) "|"}}">{{.}}</option>{{end}}</select></label><label>Kelurahan domisili<select name="home_neighborhood" id="neighborhood-select" required disabled><option value="">Pilih kecamatan dahulu</option></select></label></div>
+        <label>Alamat domisili<textarea name="address" rows="2" required></textarea></label>
+        <label>Foto KTP <span class="label-help">(JPG/PNG, maksimal 5 MB)</span><input type="file" name="ktp" accept="image/jpeg,image/png"></label>
+        <label>Kata sandi <span class="label-help">(minimal 8 karakter)</span><input type="password" name="password" minlength="8" autocomplete="new-password" required></label>
+        <button class="button button-primary button-wide" type="submit">Daftar akun warga <span>→</span></button>
+        <p class="fine-print">Dengan mendaftar, data Anda akan digunakan untuk verifikasi identitas dan pelayanan kelurahan.</p>
+      </form>
+      <p class="auth-switch">Sudah punya akun? <a href="/login">Masuk di sini</a></p>
+    {{end}}
+  </div></div>
+</section>
+{{end}}

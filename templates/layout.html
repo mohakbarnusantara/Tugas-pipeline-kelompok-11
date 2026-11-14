@@ -1,0 +1,56 @@
+{{define "layout"}}
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#075e54">
+  <title>{{.Title}} · SILAYANG</title>
+  <link rel="stylesheet" href="/static/app.css">
+  <link rel="stylesheet" href="/static/draft.css">
+  <script defer src="/static/app.js"></script>
+</head>
+<body>
+<header class="site-header">
+  <div class="nav-wrap">
+    <a href="/" class="brand" aria-label="SILAYANG beranda">
+      <span class="brand-mark">S</span>
+      <span><strong>SILAYANG</strong><small>Sistem Layanan Kelurahan</small></span>
+    </a>
+    <button class="menu-toggle" type="button" aria-label="Buka navigasi" aria-expanded="false">☰</button>
+    <nav class="main-nav">
+      {{if .User}}
+        <a href="/dashboard">Ringkasan</a>
+        {{if eq .User.Role "warga"}}
+          <a href="/surat/baru">Layanan surat</a><a href="/aduan/baru">Aduan warga</a>
+        {{else}}
+          <a href="/admin">Panel admin</a>
+        {{end}}
+        <span class="nav-user">{{.User.Name}}</span>
+        <form action="/logout" method="post"><button class="button button-quiet button-small" type="submit">Keluar</button></form>
+      {{else}}
+        <a href="/tracking">Lacak permohonan</a>
+        <a href="/login">Masuk</a>
+        <a class="button button-primary button-small" href="/register">Daftar akun</a>
+      {{end}}
+    </nav>
+  </div>
+</header>
+<main>
+  {{if eq .Page "home"}}{{template "home-content" .}}
+  {{else if eq .Page "auth"}}{{template "auth-content" .}}
+  {{else if eq .Page "dashboard"}}{{template "dashboard-content" .}}
+  {{else if eq .Page "surat_form"}}{{template "surat-form-content" .}}
+  {{else if eq .Page "complaint_form"}}{{template "complaint-form-content" .}}
+  {{else if eq .Page "tracking"}}{{template "tracking-content" .}}
+  {{else if eq .Page "admin"}}{{template "admin-content" .}}{{end}}
+</main>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <span class="brand brand-footer"><span class="brand-mark">S</span><span><strong>SILAYANG</strong><small>Layanan publik yang dekat dan transparan</small></span></span>
+    <span>© 2026 Pemerintah Kelurahan · Kota Palu</span>
+  </div>
+</footer>
+</body>
+</html>
+{{end}}

@@ -1,0 +1,15 @@
+{{define "tracking"}}{{template "layout" .}}{{end}}
+{{define "tracking-content"}}
+<section class="tracking-page">
+  <a class="back-link" href="/">← Beranda</a>
+  <div class="tracking-card">
+    <div class="tracking-icon">⌕</div><span class="eyebrow eyebrow-green">STATUS LAYANAN</span><h1>Lacak permohonan</h1><p>Masukkan kode tracking surat atau aduan untuk melihat perkembangan terbaru.</p>
+    <form action="/tracking" method="get" class="tracking-form"><input type="text" name="code" value="{{.Code}}" placeholder="Contoh: REQ-20261019-ABC123" aria-label="Kode tracking" required><button class="button button-primary" type="submit">Lacak <span>→</span></button></form>
+    {{if .Code}}
+      {{if .Request}}<div class="tracking-result"><div class="result-top"><span class="status-pill {{statusClass .Request.Status}}">{{statusName .Request.Status}}</span><small>{{date .Request.UpdatedAt}}</small></div><h2>{{.Request.ServiceName}}</h2><p>Kode <strong>{{.Request.TrackingCode}}</strong></p>{{if .Request.AdminNote}}<div class="result-note"><strong>Catatan kelurahan</strong><p>{{.Request.AdminNote}}</p></div>{{end}}{{if and (eq .Request.Status "selesai") .User}}<a class="button button-primary" href="/dokumen/{{.Request.ID}}">Buka surat resmi</a>{{else if eq .Request.Status "selesai"}}<p class="label-help">Masuk ke akun Anda untuk membuka dokumen surat.</p>{{end}}</div>
+      {{else if .Complaint}}<div class="tracking-result"><div class="result-top"><span class="status-pill {{statusClass .Complaint.Status}}">{{statusName .Complaint.Status}}</span><small>{{date .Complaint.UpdatedAt}}</small></div><h2>{{.Complaint.Category}}</h2><p>Kode <strong>{{.Complaint.TrackingCode}}</strong> · {{.Complaint.Neighborhood}}, {{.Complaint.District}}</p>{{if .Complaint.AdminReply}}<div class="result-note"><strong>Tanggapan kelurahan</strong><p>{{.Complaint.AdminReply}}</p></div>{{end}}</div>
+      {{else}}<div class="alert alert-error tracking-error">Kode tracking tidak ditemukan. Periksa kembali kode Anda.</div>{{end}}
+    {{end}}
+  </div>
+</section>
+{{end}}

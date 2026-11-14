@@ -1,0 +1,37 @@
+{{define "surat_form"}}{{template "layout" .}}{{end}}
+{{define "surat-form-content"}}
+<section class="page-heading"><div><a class="back-link" href="/dashboard">← Ringkasan</a><span class="eyebrow eyebrow-green">LAYANAN ADMINISTRASI</span><h1>Ajukan permohonan surat</h1><p>Pilih layanan dan lengkapi data pemohon. Petugas akan memeriksa berkas sebelum proses persetujuan.</p></div><span class="heading-illustration">▤</span></section>
+<div class="form-page">
+  {{if .Error}}<div class="alert alert-error">{{.Error}}</div>{{end}}
+  <form id="letter-form" method="post" action="/surat" enctype="multipart/form-data" class="panel form-panel" data-user-id="{{.User.ID}}">
+    <div class="form-section-title"><span>01</span><div><h2>Wilayah surat</h2><p>Pilih kecamatan dan kelurahan terlebih dahulu sebelum memilih jenis surat.</p></div></div>
+    <div class="form-grid">
+      <label>Kecamatan<select name="kecamatan" id="district-select" required><option value="">Pilih kecamatan</option>{{range .Districts}}<option value="{{.}}" data-neighborhoods="{{join (index $.Neighborhoods .) "|"}}">{{.}}</option>{{end}}</select></label>
+      <label>Kelurahan<select name="kelurahan" id="neighborhood-select" required disabled><option value="">Pilih kecamatan dahulu</option></select></label>
+    </div>
+    <div class="form-section-title form-section-spaced"><span>02</span><div><h2>Jenis layanan</h2><p>Pilih surat yang sesuai dengan kebutuhan Anda.</p></div></div>
+    <label>Jenis surat<select name="service_code" id="service-select" required><option value="">Pilih layanan surat</option>{{range .Services}}<option value="{{.Code}}" data-fields="{{range .Fields}}{{.}}|{{end}}" data-extra="{{.ExtraDoc}}">{{.Category}} — {{.Name}}</option>{{end}}</select></label>
+    <div id="service-hint" class="inline-hint">Setiap layanan dapat meminta data khusus dan berkas pendukung.</div>
+    <div class="form-section-title form-section-spaced"><span>03</span><div><h2>Data subjek surat</h2><p>Isi data orang yang tercantum pada surat.</p></div></div>
+    <label class="checkbox-row"><input id="is-self" type="checkbox" name="is_self" value="true" checked><span><strong>Ajukan untuk diri sendiri</strong><small>Data profil Anda akan digunakan otomatis.</small></span></label>
+    <div class="form-grid"><label>Nama lengkap<input type="text" name="applicant_nama" data-profile-name="{{.User.Name}}" value="{{.User.Name}}" required></label><label>NIK (16 digit)<input type="text" name="applicant_nik" data-profile-nik="{{.User.NIK}}" value="{{.User.NIK}}" inputmode="numeric" maxlength="16" required></label></div>
+    <div class="form-grid"><label>Tempat lahir<input type="text" name="applicant_tempat_lahir" data-profile-birth-place="{{.User.BirthPlace}}" value="{{.User.BirthPlace}}"></label><label>Tanggal lahir<input type="date" name="applicant_tanggal_lahir" data-profile-birth="{{.User.BirthDate}}" value="{{.User.BirthDate}}"></label></div>
+    <div class="form-grid"><label>Jenis kelamin<select name="applicant_jenis_kelamin" data-profile-gender="{{.User.Gender}}"><option value="">Pilih</option><option value="L" {{if eq .User.Gender "L"}}selected{{end}}>Laki-laki</option><option value="P" {{if eq .User.Gender "P"}}selected{{end}}>Perempuan</option></select></label><label>Pekerjaan<input type="text" name="applicant_pekerjaan" data-profile-occupation="{{.User.Occupation}}" value="{{.User.Occupation}}"></label></div>
+    <div class="form-grid"><label>Agama<input type="text" name="applicant_agama" placeholder="Contoh: Islam"></label><label>Kewarganegaraan<input type="text" name="applicant_kewarganegaraan" value="Indonesia"></label></div>
+    <label>Alamat<textarea name="applicant_alamat" rows="2" data-profile-address="{{.User.Address}}" required>{{.User.Address}}</textarea></label>
+    <label>Tujuan / keperluan surat<textarea name="keperluan" rows="2" placeholder="Jelaskan tujuan penggunaan surat" required></textarea></label>
+    <div class="specific-fields" id="specific-fields"></div>
+    <div class="form-section-title form-section-spaced"><span>04</span><div><h2>Surat pengantar & lampiran</h2><p>Unggah berkas pendukung yang diminta untuk layanan ini.</p></div></div>
+    <label>Nomor surat pengantar RT<input type="text" name="rt_letter_number" placeholder="Contoh: 012/RT-04/VI/2026" required></label>
+    <div class="form-grid"><label>Scan surat pengantar RT <span class="label-help">(JPG, PNG, atau PDF · maks. 5 MB)</span><input type="file" name="rt_attachment" accept="image/jpeg,image/png,application/pdf"></label><label id="extra-doc-label">Berkas tambahan <span class="label-help">(jika dipersyaratkan · maks. 5 MB)</span><input type="file" name="extra_attachment" accept="image/jpeg,image/png,application/pdf"></label></div>
+    <div class="form-note"><span>ⓘ</span><p>Pastikan informasi sesuai dokumen pendukung. Petugas dapat meminta perbaikan jika ada data yang belum lengkap.</p></div>
+    <div class="form-actions"><a href="/dashboard" class="button button-outline">Batal</a><button class="button button-outline" id="preview-draft" type="button">Pratinjau draf</button><button class="button button-primary" type="submit">Kirim permohonan <span>→</span></button></div>
+  </form>
+  <section id="draft-preview" class="draft-preview" hidden aria-live="polite">
+    <header class="draft-toolbar"><div><a class="button button-outline" href="/dashboard">Kembali ke Riwayat</a><button id="back-to-form" class="button button-outline" type="button">Kembali ke Formulir</button></div><button id="download-draft" class="button button-dark" type="button">Unduh PDF</button></header>
+    <div class="draft-banner">Dokumen ini digenerate otomatis berdasarkan data e-KTP Anda. Perubahan data surat hanya dapat dilakukan oleh Staf Kelurahan.</div>
+    <p id="draft-error" class="alert alert-error" hidden role="alert"></p>
+    <article id="draft-paper" class="draft-paper" aria-label="Pratinjau draf surat"></article>
+  </section>
+</div>
+{{end}}

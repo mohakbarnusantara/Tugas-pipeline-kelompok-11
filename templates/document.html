@@ -1,0 +1,72 @@
+{{define "document"}}
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{.Request.ServiceName}} · SILAYANG</title>
+  <link rel="stylesheet" href="/static/app.css">
+  <link rel="stylesheet" href="/static/draft.css">
+</head>
+<body class="document-body">
+  <div class="print-toolbar">
+    <a href="/dashboard">← Kembali</a>
+    <button class="button button-primary" onclick="window.print()">Cetak / Simpan PDF</button>
+  </div>
+  <main class="official-document">
+    <header class="document-header draft-document-header">
+      <img class="document-emblem draft-emblem" src="/static/lambang-kota-palu.png" alt="Lambang Kota Palu">
+      <div class="draft-letterhead-text">
+        <strong class="draft-government-name">PEMERINTAH KOTA PALU</strong>
+        <strong class="draft-district-name">KECAMATAN {{.Request.District}}</strong>
+        <strong class="draft-office-name">KELURAHAN {{.Request.Neighborhood}}</strong>
+        <p class="draft-address">Alamat: {{.Office.Address}}{{if .OfficeEmail}} | Email: {{.OfficeEmail}}{{end}}</p>
+      </div>
+    </header>
+    <div class="draft-divider"><span></span></div>
+    <h1>{{.Request.ServiceName}}</h1>
+    <h2>Nomor: {{.Request.OfficialNumber}}</h2>
+    {{if .IsDraft}}<div class="draft-watermark">DRAFT · BELUM DISETUJUI LURAH</div>{{end}}
+    <p class="document-intro">Yang bertanda tangan di bawah ini menerangkan bahwa:</p>
+    <table class="document-data">
+      <tr><td>Nama</td><td>: {{.Request.Applicant.nama}}</td></tr>
+      <tr><td>NIK</td><td>: {{.Request.Applicant.nik}}</td></tr>
+      <tr><td>Tempat/Tanggal lahir</td><td>: {{.Request.Applicant.tanggal_lahir}}</td></tr>
+      <tr><td>Jenis kelamin</td><td>: {{.Request.Applicant.jenis_kelamin}}</td></tr>
+      <tr><td>Alamat</td><td>: {{.Request.Applicant.alamat}}</td></tr>
+      {{range $key,$value := .Request.Specific}}<tr><td>{{$key}}</td><td>: {{$value}}</td></tr>{{end}}
+    </table>
+    <p>Surat keterangan ini dibuat berdasarkan data dan berkas yang telah diperiksa, untuk dipergunakan sebagaimana mestinya.</p>
+    <div class="signature-block">
+      <p>Palu, {{date .Request.UpdatedAt}}</p>
+      <p>Lurah</p>
+      {{if .IsDraft}}
+        {{if .Office.Mayor}}<p><strong>{{.Office.Mayor}}</strong></p>{{else}}<p>__________________</p>{{end}}
+        <div class="signature-placeholder">MENUNGGU PERSETUJUAN</div>
+      {{else}}
+        <svg class="signature-qr" viewBox="0 0 21 21" role="img" aria-label="Kode QR dummy, hanya tampilan">
+          <rect width="21" height="21" fill="#fff"/>
+          <g fill="#111">
+            <path d="M0 0h7v7H0zM14 0h7v7h-7zM0 14h7v7H0z"/>
+            <path d="M8 1h1v1H8zM10 1h2v1h-2zM8 3h2v1H8zM11 4h1v2h-1zM8 6h1v1H8zM9 8h1v2H9zM11 8h2v1h-2zM14 8h1v2h-1zM17 8h2v1h-2zM20 8h1v2h-1zM1 8h2v1H1zM4 8h1v2H4zM7 9h1v2H7zM2 10h1v2H2zM5 11h2v1H5zM9 11h2v1H9zM12 10h1v2h-1zM15 11h2v1h-2zM18 10h1v2h-1zM8 13h2v1H8zM11 13h1v2h-1zM13 14h2v1h-2zM16 13h1v2h-1zM19 13h2v1h-2zM8 16h1v2H8zM10 16h2v1h-2zM13 17h1v2h-1zM15 16h2v1h-2zM18 16h1v2h-1zM10 19h1v2h-1zM15 19h1v2h-1zM19 19h2v1h-2z"/>
+          </g>
+          <g fill="#fff">
+            <path d="M1 1h5v5H1zM15 1h5v5h-5zM1 15h5v5H1z"/>
+          </g>
+          <g fill="#111">
+            <path d="M2 2h3v3H2zM16 2h3v3h-3zM2 16h3v3H2z"/>
+          </g>
+        </svg>
+        <p class="signature-dummy-label">QR SIMULASI</p>
+        {{if .Office.Mayor}}<p class="signature-name"><strong>{{.Office.Mayor}}</strong></p>{{else}}<p>__________________</p>{{end}}
+        <p class="signature-nip">NIP. 000000000000000000 (DUMMY)</p>
+      {{end}}
+    </div>
+    <div class="document-footnote">
+      {{if .IsDraft}}Pratinjau draft SILAYANG — dokumen ini belum disetujui dan belum berlaku.{{else}}Dokumen pratinjau SILAYANG · Tanda tangan, QR, dan NIP hanya tampilan dummy, bukan TTE resmi dan tidak dapat digunakan untuk verifikasi.{{end}}
+      <br>Kode tracking: {{.Request.TrackingCode}} · <a href="{{.VerifyURL}}">Periksa status</a>
+    </div>
+  </main>
+</body>
+</html>
+{{end}}

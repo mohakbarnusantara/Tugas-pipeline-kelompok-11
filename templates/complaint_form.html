@@ -1,0 +1,18 @@
+{{define "complaint_form"}}{{template "layout" .}}{{end}}
+{{define "complaint-form-content"}}
+<section class="page-heading"><div><a class="back-link" href="/dashboard">← Ringkasan</a><span class="eyebrow eyebrow-green">ASPIRASI WARGA</span><h1>Sampaikan aduan</h1><p>Informasikan masalah yang terjadi agar petugas dapat menindaklanjuti.</p></div><span class="heading-illustration peach">◉</span></section>
+<div class="form-page">
+  {{if .Error}}<div class="alert alert-error">{{.Error}}</div>{{end}}
+  <form method="post" action="/aduan" enctype="multipart/form-data" class="panel form-panel">
+    <div class="form-section-title"><span>01</span><div><h2>Data pelapor</h2><p>Data kontak diambil dari profil akun Anda.</p></div></div>
+    <div class="form-grid"><label>Nama pelapor<input type="text" value="{{.User.Name}}" readonly></label><label>Nomor HP / WhatsApp<input type="text" value="{{.User.Phone}}" readonly></label></div>
+    <div class="form-section-title form-section-spaced"><span>02</span><div><h2>Detail kejadian</h2><p>Pilih kategori dan lokasi kejadian yang tepat.</p></div></div>
+    <label>Kategori aduan<select name="category" required><option value="">Pilih kategori</option>{{range .Categories}}<option value="{{.}}">{{.}}</option>{{end}}</select></label>
+    <div class="form-grid"><label>Kecamatan<select name="district" id="district-select" required><option value="">Pilih kecamatan</option><option>Mantikulore</option><option>Palu Barat</option><option>Palu Selatan</option><option>Palu Timur</option><option>Palu Utara</option><option>Tatanga</option><option>Tawaeli</option><option>Ulujadi</option></select></label><label>Kelurahan<select name="neighborhood" id="neighborhood-select" required disabled><option value="">Pilih kecamatan dahulu</option></select></label></div>
+    <label>Uraikan laporan <textarea name="description" rows="5" minlength="15" placeholder="Ceritakan kondisi, waktu kejadian, dan informasi lain yang membantu petugas..." required></textarea><span class="label-help">Minimal 15 karakter. Jelaskan lokasi atau kronologi sejelas mungkin.</span></label>
+    <label>Foto bukti <span class="label-help">(JPG, PNG, atau PDF · opsional · maks. 5 MB)</span><input type="file" name="evidence" accept="image/jpeg,image/png,application/pdf"></label>
+    <div class="form-note"><span>ⓘ</span><p>Aduan Anda akan diterima oleh kelurahan. Simpan kode tracking yang diterbitkan untuk memantau tindak lanjut.</p></div>
+    <div class="form-actions"><a href="/dashboard" class="button button-outline">Batal</a><button class="button button-primary" type="submit">Kirim aduan <span>→</span></button></div>
+  </form>
+</div>
+{{end}}

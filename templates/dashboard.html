@@ -1,0 +1,25 @@
+{{define "dashboard"}}{{template "layout" .}}{{end}}
+{{define "dashboard-content"}}
+<section class="page-heading"><div><span class="eyebrow eyebrow-green">{{if eq .User.Role "warga"}}RUANG WARGA{{else}}RINGKASAN{{end}}</span><h1>Halo, {{.User.Name}} 👋</h1><p>{{if eq .User.Role "warga"}}Kelola permohonan layanan dan pantau perkembangan dari sini.{{else}}Pantau aktivitas layanan SILAYANG hari ini.{{end}}</p></div>{{if eq .User.Role "warga"}}<span class="status-pill {{statusClass .User.AccountStatus}}">{{statusName .User.AccountStatus}}</span>{{end}}</section>
+<div class="dashboard-wrap">
+  {{if .Notice}}<div class="alert alert-success">{{.Notice}}</div>{{end}}
+  {{if and (eq .User.Role "warga") (ne .User.AccountStatus "aktif")}}
+    <section class="pending-panel"><span class="pending-symbol">◷</span><div><h2>{{if eq .User.AccountStatus "pending"}}Akun Anda sedang diverifikasi{{else}}Akun belum dapat digunakan{{end}}</h2><p>{{if eq .User.AccountStatus "pending"}}Petugas kelurahan akan meninjau data dan foto KTP Anda. Layanan pengajuan akan terbuka setelah akun aktif.{{else}}{{.User.RejectionReason}}{{end}}</p></div></section>
+  {{else if eq .User.Role "warga"}}
+    <div class="welcome-actions"><a class="action-tile" href="/surat/baru"><span class="tile-icon icon-mint">▤</span><span><strong>Ajukan surat</strong><small>Pilih dari 30 layanan surat</small></span><b>→</b></a><a class="action-tile" href="/aduan/baru"><span class="tile-icon icon-peach">◉</span><span><strong>Sampaikan aduan</strong><small>Laporkan kondisi lingkungan</small></span><b>→</b></a><a class="action-tile" href="/tracking"><span class="tile-icon icon-blue">⌕</span><span><strong>Lacak permohonan</strong><small>Periksa status menggunakan kode</small></span><b>→</b></a></div>
+  {{else}}
+    <div class="stats-grid"><div class="stat-card"><span class="stat-icon icon-peach">♙</span><small>WARGA MENUNGGU VERIFIKASI</small><strong>{{.Stats.Residents}}</strong></div><div class="stat-card"><span class="stat-icon icon-blue">▤</span><small>PERMOHONAN MENUNGGU</small><strong>{{.Stats.Pending}}</strong></div><div class="stat-card"><span class="stat-icon icon-mint">◷</span><small>DRAFT MENUNGGU LURAH</small><strong>{{.Stats.Processing}}</strong></div><div class="stat-card"><span class="stat-icon icon-lilac">✓</span><small>SURAT SELESAI</small><strong>{{.Stats.Completed}}</strong></div></div>
+    <div class="admin-shortcut"><div><strong>Kelola layanan kelurahan</strong><p>Verifikasi akun, tinjau surat, dan tindak lanjuti aduan warga.</p></div><a class="button button-primary" href="/admin">Buka panel admin <span>→</span></a></div>
+  {{end}}
+  {{if eq .User.Role "warga"}}
+    <div class="dashboard-columns">
+      <section class="panel"><div class="panel-heading"><div><span class="eyebrow eyebrow-green">RIWAYAT LAYANAN</span><h2>Permohonan surat</h2></div><a href="/surat/baru" class="text-link">Ajukan baru →</a></div>
+        {{if .Requests}}<div class="record-list">{{range .Requests}}<article class="record"><div class="record-icon icon-mint">▤</div><div class="record-main"><strong>{{.ServiceName}}</strong><small>{{.TrackingCode}} · {{date .CreatedAt}}</small>{{if eq .Status "selesai"}}<a class="text-link" href="/dokumen/{{.ID}}" aria-label="Buka, cetak, atau simpan PDF {{.ServiceName}}">Cetak / Simpan PDF →</a>{{end}}</div><span class="status-pill {{statusClass .Status}}">{{statusName .Status}}</span></article>{{end}}</div>{{else}}<div class="empty-state"><span>▤</span><strong>Belum ada pengajuan surat</strong><p>Permohonan yang Anda kirim akan muncul di sini.</p></div>{{end}}
+      </section>
+      <section class="panel"><div class="panel-heading"><div><span class="eyebrow eyebrow-green">ASPIRASI WARGA</span><h2>Aduan saya</h2></div><a href="/aduan/baru" class="text-link">Buat aduan →</a></div>
+        {{if .Complaints}}<div class="record-list">{{range .Complaints}}<article class="record"><div class="record-icon icon-peach">◉</div><div class="record-main"><strong>{{.Category}}</strong><small>{{.TrackingCode}} · {{date .CreatedAt}}</small>{{if .AdminReply}}<p class="record-reply">{{.AdminReply}}</p>{{end}}</div><span class="status-pill {{statusClass .Status}}">{{statusName .Status}}</span></article>{{end}}</div>{{else}}<div class="empty-state"><span>◉</span><strong>Belum ada aduan</strong><p>Aduan dan tanggapan petugas akan muncul di sini.</p></div>{{end}}
+      </section>
+    </div>
+  {{end}}
+</div>
+{{end}}
